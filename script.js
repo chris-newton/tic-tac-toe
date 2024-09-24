@@ -28,19 +28,23 @@ const gameBoard = (function createGameBoard() {
         emptySpaces--;
     }
 
-    return { isFull, getSpace, setSpace, board };
+    return { isFull, getSpace, setSpace };
 })();
 
 function createPlayer(name, mark) {
     // gets i and j from user and sets space on board
+    const getName = () => name;
+    const getMark = () => mark;
+
     const move = function() {
         console.log(name + "'s turn");
+
         const i = parseInt(prompt("pick row"));
         const j = parseInt(prompt("pick column"));
         gameBoard.setSpace(mark, i, j);
     }
 
-    return { name, mark, move };
+    return { getName, getMark, move };
 }
 
 // game logic
@@ -58,10 +62,10 @@ const game = (function createGame(player1, player2) {
 
         switch (outcome) {
             case player1:
-                console.log(player1.name + " wins!");
+                console.log(player1.getName() + " wins!");
                 break;
             case player2:
-                console.log(player2.name + " wins!");
+                console.log(player2.getName() + " wins!");
                 break;
             case "draw":
                 console.log("draw.");
@@ -73,33 +77,35 @@ const game = (function createGame(player1, player2) {
   
     // returns true iff player own
     const checkPlayerWon = function(player) {
+        const mark = player.getMark();
+        
         // check rows
         for (let i = 0; i < 3; i++) {
-            if (gameBoard.getSpace(i, 0) === player.mark && 
-                gameBoard.getSpace(i, 1) === player.mark && 
-                gameBoard.getSpace(i, 2) === player.mark) {
+            if (gameBoard.getSpace(i, 0) === mark && 
+                gameBoard.getSpace(i, 1) === mark && 
+                gameBoard.getSpace(i, 2) === mark) {
                 outcome = player;
                 return true;
             }
         }
         // check columns
         for (let j = 0; j < 3; j++) {
-            if (gameBoard.getSpace(0, j) === player.mark && 
-                gameBoard.getSpace(1, j) === player.mark && 
-                gameBoard.getSpace(2, j) === player.mark) {
+            if (gameBoard.getSpace(0, j) === mark && 
+                gameBoard.getSpace(1, j) === mark && 
+                gameBoard.getSpace(2, j) === mark) {
                 outcome = player;
                 return true;
             }
         }
         // check diagonals
-        if (gameBoard.getSpace(0, 0) == player.mark &&
-            gameBoard.getSpace(1, 1) == player.mark && 
-            gameBoard.getSpace(2, 2) == player.mark) {
+        if (gameBoard.getSpace(0, 0) == mark &&
+            gameBoard.getSpace(1, 1) == mark && 
+            gameBoard.getSpace(2, 2) == mark) {
             outcome = player;
             return true
-        } else if (gameBoard.getSpace(0, 2) == player.mark &&
-                    gameBoard.getSpace(1, 1) == player.mark &&
-                    gameBoard.getSpace(2, 0) == player.mark) {
+        } else if (gameBoard.getSpace(0, 2) == mark &&
+                    gameBoard.getSpace(1, 1) == mark &&
+                    gameBoard.getSpace(2, 0) == mark) {
             outcome = player;
             return true
         }
@@ -114,7 +120,7 @@ const game = (function createGame(player1, player2) {
             outcome = "draw";
             return true;
         } 
-        return [player1, player2].reduce((acc, curr) => acc || checkPlayerWon(curr), false); // is this too tryhard?
+        return checkPlayerWon(player1) || checkPlayerWon(player2); 
     }
 
     return { start };
