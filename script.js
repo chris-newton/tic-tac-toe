@@ -58,66 +58,63 @@ const game = (function createGame(player1, player2) {
 
         switch (outcome) {
             case player1:
-                console.log("player1 wins!");
+                console.log(player1.name + " wins!");
                 break;
             case player2:
-                console.log("player2 wins!");
+                console.log(player2.name + " wins!");
                 break;
             case "draw":
                 console.log("draw.");
                 break;
             default:
+                console.log("you schouldn't be here");
         }
     }
-    
+  
+    // returns true iff player own
+    const checkPlayerWon = function(player) {
+        // check rows
+        for (let i = 0; i < 3; i++) {
+            if (gameBoard.getSpace(i, 0) === player.mark && 
+                gameBoard.getSpace(i, 1) === player.mark && 
+                gameBoard.getSpace(i, 2) === player.mark) {
+                outcome = player;
+                return true;
+            }
+        }
+        // check columns
+        for (let j = 0; j < 3; j++) {
+            if (gameBoard.getSpace(0, j) === player.mark && 
+                gameBoard.getSpace(1, j) === player.mark && 
+                gameBoard.getSpace(2, j) === player.mark) {
+                outcome = player;
+                return true;
+            }
+        }
+        // check diagonals
+        if (gameBoard.getSpace(0, 0) == player.mark &&
+            gameBoard.getSpace(1, 1) == player.mark && 
+            gameBoard.getSpace(2, 2) == player.mark) {
+            outcome = player;
+            return true
+        } else if (gameBoard.getSpace(0, 2) == player.mark &&
+                    gameBoard.getSpace(1, 1) == player.mark &&
+                    gameBoard.getSpace(2, 0) == player.mark) {
+            outcome = player;
+            return true
+        }
+        return false;
+    }
+
     // check game status
     // returns true iff game has been won or draw
     const isOver = function() {
-
-        console.log("checking isOver, board = ", gameBoard.board);
-        const players = { player1, player2 };
-
-        // check if a player won
-        for (let currPlayer in players) {
-            // check rows
-            for (let i = 0; i < 3; i++) {
-                if (gameBoard.getSpace(i, 0) === currPlayer.mark && 
-                    gameBoard.getSpace(i, 1) === currPlayer.mark && 
-                    gameBoard.getSpace(i, 2) === currPlayer.mark) {
-                    outcome = currPlayer;
-                    return true;
-                }
-            }
-            // check columns
-            for (let j = 0; j < 3; j++) {
-                if (gameBoard.getSpace(0, j) === currPlayer.mark && 
-                    gameBoard.getSpace(1, j) === currPlayer.mark && 
-                    gameBoard.getSpace(2, j) === currPlayer.mark) {
-                    outcome = currPlayer;
-                    console.log("here");
-                    return true;
-                }
-            }
-            // check diagonals
-            if (gameBoard.getSpace(0, 0) == currPlayer.mark &&
-                gameBoard.getSpace(1, 1) == currPlayer.mark && 
-                gameBoard.getSpace(2, 2) == currPlayer.mark) {
-                outcome = currPlayer;
-                return true
-            } else if (gameBoard.getSpace(0, 2) == currPlayer.mark &&
-                       gameBoard.getSpace(1, 1) == currPlayer.mark &&
-                       gameBoard.getSpace(2, 0) == currPlayer.mark) {
-                outcome = currPlayer;
-                return true
-            }
-        }
-
-        // if board is full and no player won, it is a draw
+        // check draw
         if (gameBoard.isFull()) {
             outcome = "draw";
             return true;
         } 
-        return false;
+        return [player1, player2].reduce((acc, curr) => acc || checkPlayerWon(curr), false); // is this too tryhard?
     }
 
     return { start };
