@@ -6,6 +6,7 @@ const gameBoard = (function createGameBoard() {
     let emptySpaces = 9;
 
     const isFull = () => emptySpaces === 0;
+    const getBoard = () => board;
 
     const getSpace = function(i, j) {
         if (i < 0 || i >= board.length || j < 0 || j >= board[0].length) {
@@ -28,7 +29,7 @@ const gameBoard = (function createGameBoard() {
         emptySpaces--;
     }
 
-    return { isFull, getSpace, setSpace };
+    return { isFull, getBoard, getSpace, setSpace };
 })();
 
 function createPlayer(name, mark) {
@@ -36,45 +37,19 @@ function createPlayer(name, mark) {
     const getName = () => name;
     const getMark = () => mark;
 
-    const move = function() {
-        console.log(name + "'s turn");
-
-        const i = parseInt(prompt("pick row"));
-        const j = parseInt(prompt("pick column"));
-        gameBoard.setSpace(mark, i, j);
-    }
-
-    return { getName, getMark, move };
+    return { getName, getMark };
 }
 
 // game logic
 const game = (function createGame(player1, player2) {
     let outcome = null; // will be set to player1, player2, or "draw" by end of game
+    turn = player1;
 
-    const start = function() {
-        turn = player1;
+    const getTurn = () => turn;
+    const toggleTurn = () => turn = (turn === player1) ? player2 : player1;
+    
+    const getOutcome = () => outcome;
 
-        // loop turns until game over
-        while (!isOver()) {
-            turn.move();
-            turn = (turn === player1) ? player2 : player1; // flip currPlayer
-        }
-
-        switch (outcome) {
-            case player1:
-                console.log(player1.getName() + " wins!");
-                break;
-            case player2:
-                console.log(player2.getName() + " wins!");
-                break;
-            case "draw":
-                console.log("draw.");
-                break;
-            default:
-                console.log("you schouldn't be here");
-        }
-    }
-  
     // returns true iff player own
     const checkPlayerWon = function(player) {
         const mark = player.getMark();
@@ -123,7 +98,58 @@ const game = (function createGame(player1, player2) {
         return checkPlayerWon(player1) || checkPlayerWon(player2); 
     }
 
-    return { start };
+    const declareOutcome = function() {
+        switch (outcome) {
+            case player1:
+                console.log(player1.getName() + " wins!");
+                break;
+            case player2:
+                console.log(player2.getName() + " wins!");
+                break;
+            case "draw":
+                console.log("draw.");
+                break;
+            default:
+                console.log("you schouldn't be here");
+        }
+    }
+    
+    return { getTurn, toggleTurn, getOutcome, isOver, declareOutcome };
 })(createPlayer("bob", "X"), createPlayer("alice", "O"));
 
-game.start();
+const displayController = (function createDisplayController() {
+    // updates DOM with current state of board
+    const render = function() {
+        const board = gameBoard.getBoard();
+
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[0].length; j++) {
+                const selector = `.space${i}${j} h3`;
+                const mark = document.querySelector(selector);
+                mark.innerText = board[i][j];
+            }
+        }
+    }
+
+    // add click listeners to spaces    
+    const buttons = document.querySelectorAll("button[class^='space'");
+    buttons.forEach((button) => 
+        button.addEventListener("click", (e) => {
+            const currButton = e.target;
+            const i = currButton.classList[0].slice(-2, -1); // the class of the current button
+            const j = currButton.classList[0].slice(-1); // the class of the current button
+            const currTurn = game.getTurn(); // get the player whose turn it currently is 
+            
+            gameBoard.setSpace(currTurn.getMark(), i, j);
+            game.toggleTurn(); 
+            displayController.render();
+           
+            
+            if (game.isOver()) {
+                game.declareOutcome();
+            }
+        })
+    );
+
+    return { render }
+})();

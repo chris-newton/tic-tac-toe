@@ -1,0 +1,51 @@
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.screen {
+    height: 500px;
+    width: 500px;
+    background-color: rgb(230, 230, 230);
+    border-radius: 20px;
+    padding: 30px;
+}
+
+.board-grid {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(160, 160, 160);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    place-items: center;
+    gap: 1px;
+}
+
+.board-grid h3 {
+    font-size: 5rem;
+    font-weight: 500;
+}
+
+.board-grid > button {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+.board-grid > button:active {
+    background-color: rgb(255, 255, 255);
+}
+
+
+.board-grid > button:hover {
+
+}
