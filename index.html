@@ -11,16 +11,35 @@
     <body>
         <div class="screen">
             <div class="board-grid">
-                <button class="space00"><h3></h3></button>
-                <button class="space01"><h3></h3></button>
-                <button class="space02"><h3></h3></button>
-                <button class="space10"><h3></h3></button>
-                <button class="space11"><h3></h3></button>
-                <button class="space12"><h3></h3></button>
-                <button class="space20"><h3></h3></button>
-                <button class="space21"><h3></h3></button>
-                <button class="space22"><h3></h3></button>
+                <button class="space00"></button>
+                <button class="space01"></button>
+                <button class="space02"></button>
+                <button class="space10"></button>
+                <button class="space11"></button>
+                <button class="space12"></button>
+                <button class="space20"></button>
+                <button class="space21"></button>
+                <button class="space22"></button>
             </div>
         </div>
+       
+        <dialog>
+            <form class="name-entry">
+                <div class="name1-entry">
+                    <label for="name1">Player 1 name: </label>
+                    <input type="text" id="name1" name="name1" autocomplete="off">
+                </div>
+
+                <div class="name2-entry">
+                    <label for="name2">Player 2 name: </label>
+                    <input type="text" id="name2" name="name2" autocomplete="off">
+                </div>
+                
+                <button type="submit">
+                    <img class="svg" src="./svg/arrow-right-circle.svg">
+                </button>
+            </form>
+        </dialog>
+        <button class="reset">reset</button>
     </body>
 </html>

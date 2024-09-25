@@ -11,12 +11,74 @@ body {
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: departure-mono;
+    src: url(./fonts/DepartureMono-Regular.woff2);
+}
+
+dialog {
+    display: block;
+    height: 440px;
+    width: 440px;
+    border: none;
+    justify-self: center;
+    background-color: rgb(230, 230, 230);
+    font-size: 0.85rem;
+}
+
+dialog *,
+button.reset * {
+    font-family: departure-mono;
+}
+
+.name-entry {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    input[type=text] {
+        background-color: rgba(48, 48, 48, 0.068);
+        border: none;
+        border-radius: 2px;
+        padding: 5px;
+        outline: none;
+        margin-left: 10px;
+        font-weight: 500;
+        font-size: 1rem;  
+        padding-left: 10px;  
+    }
+
+    input[type=text]:focus {
+        background-color: rgba(48, 48, 48, 0.192);
+    }
+}   
+
+button[type="submit"] {
+    background: none;
+    border: none;
+    align-self: end;
+    margin-right: 52px;
+
+    :hover {
+        cursor: pointer;
+    }
+}
+
+.svg {
+    height: 40px;
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(75%) contrast(119%);
+}
+
 .screen {
     height: 500px;
     width: 500px;
     background-color: rgb(230, 230, 230);
     border-radius: 20px;
     padding: 30px;
+    box-shadow: 0px 0px 10px 5px rgb(187, 187, 187);
 }
 
 .board-grid {
@@ -30,12 +92,16 @@ body {
     gap: 1px;
 }
 
-.board-grid h3 {
+.hidden {
+    display: none;
+}
+
+button[class^='space'] {
     font-size: 5rem;
-    font-weight: 500;
 }
 
 .board-grid > button {
+    background-color: rgb(243, 243, 243);
     height: 100%;
     width: 100%;
     border: none;
@@ -45,7 +111,25 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
-
 .board-grid > button:hover {
+    cursor: pointer;
+}
 
+button.reset {
+    position: absolute;
+    bottom: 20px;
+    border-radius: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgb(2, 141, 2);
+    color: white;
+    font-weight: 600;
+}
+
+button.reset:active {
+    background-color: rgb(0, 114, 0);
+}
+
+button.reset:hover {
+    cursor: pointer;
 }
