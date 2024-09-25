@@ -9,6 +9,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    outline: none;
 }
 
 @font-face {
@@ -24,6 +25,12 @@ dialog {
     justify-self: center;
     background-color: rgb(230, 230, 230);
     font-size: 0.85rem;
+}
+
+.modal-show-outcome {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 dialog *,
